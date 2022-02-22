@@ -19,7 +19,7 @@ x=1;y=0;list1=[]
 while x < len(list2):
     while y != len(list2[x]):
         if y+1==len(list2[x]):list1.append(list2[x][y]);break
-        if list2[x][y]=='Umbris' or  list2[x][y]=='Toxrill' or list2[x][y]=='Olivia'or list2[x][y]=='Chandra'or list2[x][y]=='Kaya' or list2[x][y]=='Thalia':
+        if list2[x][y]=='Umbris' or  list2[x][y]=='Toxrill' or list2[x][y]=='Olivia'or list2[x][y]=='Chandra'or list2[x][y]=='Kaya' or list2[x][y]=='Thalia' or list2[x][y]=='Katilda':
             #print('list2[x][y] is',list2[x][y],y,len(list2[x]),list1)
             list2[x][y]=list2[x][y]+','+str(list2[x][y+1]);list1.append(list2[x][y]);y+=2
         else: list1.append(list2[x][y]);y+=1
