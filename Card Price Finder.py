@@ -1,7 +1,9 @@
 import requests;cardnames=[];normalprices=[];foilprices=[];import datetime
 
 #these are the user inputs
-token='OMITTED FOR PRIVACY'
+public_key='Paste Public Key Here'
+private_key='Paste Private Key Here'
+token='Paste Token Here'
 set="Innistrad: Crimson Vow"
 write_to='crimson_vow'
 
@@ -24,9 +26,10 @@ def findcardprices(cardnames,normalprices,foilprices,set,token):
             ]
         }
     )
-    assert r.status_code == 200
+    
     search_response_data = r.json()
-    #print('Search complete:');#print(search_response_data)
+    if r.status_code != 200:
+        gettoken(public_key,private_key);return cardnames,normalprices,foilprices
     productIDs=list(search_response_data.values());productIDs=productIDs[3];backupproductIDs=list(productIDs)
 
     #this part searches pricing
@@ -68,10 +71,12 @@ def findcardprices(cardnames,normalprices,foilprices,set,token):
                 cardnames.append(i['name'])
     #for i in range(len(cardnames)): print(cardnames[i], normalprices[i])
     return cardnames,normalprices,foilprices
-def gettoken(): ## you need this if your token expires
+def gettoken(public_key,private_key): ## you need this if your token expires
     import requests
     payload = {
-        'OMITTED FOR PRIVACY'
+        'grant_type': 'client_credentials',
+        'client_id': f'{public_key}',
+         'client_secret': f'{private_key}',
         }
     r = requests.post('https://api.tcgplayer.com'
              + '/token',
@@ -79,7 +84,7 @@ def gettoken(): ## you need this if your token expires
         )
     token_response_data = r.json()
     print('Token Received:')
-    print(token_response_data)
+    print(token_response_data['access_token'])
 def writetotxt(cardnames,normalprices,foilprices):
     filternames = [];filterprices = []
     # takes out cards we don't want in this list
@@ -104,6 +109,5 @@ def writetotxt(cardnames,normalprices,foilprices):
     f.write('\n')
     f.write(filterprices)
     f.close()
-#gettoken()
 cardnames,normalprices,foilprices=findcardprices(cardnames,normalprices,foilprices,set,token);writetotxt(cardnames,normalprices,foilprices,write_to)
 
