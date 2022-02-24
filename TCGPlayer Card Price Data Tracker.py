@@ -1,5 +1,9 @@
 import requests;cardnames=[];normalprices=[];foilprices=[];import datetime
-def findcardprices(cardnames,normalprices,foilprices):
+
+set="Innistrad: Crimson Vow"
+write_to='crimson_vow'
+
+def findcardprices(cardnames,normalprices,foilprices,set):
     ##this part searches for the productIDs'
     token='OMITTED FOR PRIVACY'
 
@@ -14,7 +18,7 @@ def findcardprices(cardnames,normalprices,foilprices):
             "filters": [
                 {
                     "name": "SetName",
-                    "values": ["Innistrad: Crimson Vow"]
+                    "values": [f"{set}"]
                 },{ "name": "Rarity","values": ["Mythic", "Rare"]}
 
             ]
@@ -92,7 +96,7 @@ def writetotxt(cardnames,normalprices,foilprices):
     filterprices = '@'.join(str(y) for y in filterprices)
 
     # writes data to txt file
-    f = open('crimson_vow.txt', 'a')
+    f = open(f'{write_to}.txt', 'a')
     f.write('\n')
     f.write(str(datetime.date.today()))
     f.write('\n')
@@ -101,5 +105,5 @@ def writetotxt(cardnames,normalprices,foilprices):
     f.write(filterprices)
     f.close()
 #token()
-cardnames,normalprices,foilprices=findcardprices(cardnames,normalprices,foilprices);writetotxt(cardnames,normalprices,foilprices)
+cardnames,normalprices,foilprices=findcardprices(cardnames,normalprices,foilprices,set);writetotxt(cardnames,normalprices,foilprices,write_to)
 
