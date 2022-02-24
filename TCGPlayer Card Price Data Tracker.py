@@ -88,8 +88,8 @@ def writetotxt(cardnames,normalprices,foilprices):
     for i in range(len(filternames)): print(filternames[i], filterprices[i])
 
     # turns data into strings to write to txt
-    filternames = ','.join(str(y) for y in filternames)
-    filterprices = ','.join(str(y) for y in filterprices)
+    filternames = '@'.join(str(y) for y in filternames)
+    filterprices = '@'.join(str(y) for y in filterprices)
 
     # writes data to txt file
     f = open('crimson_vow.txt', 'a')
