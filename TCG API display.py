@@ -9,7 +9,7 @@ for i in f:
     i=i[:-1]
     list1.append(i)
 list1[-1]=list1[-1]+lastchar
-#takes the comma'ed string and turns it into a list seperated by commas
+#takes the string and turns it into a list seperated by commas
 for i in list1:
     i=i.split('@')
     list2.append(i)
