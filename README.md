@@ -14,7 +14,7 @@
 
 4.2 Display Section: For each card in the data, the program will show a card name with a price next to it. Using the buttons, you can go back to different dates of cards and see the differences in price. 
 
-4.3 Text File:  If you look at the example “crimson_vow.txt”, you will see an example of the data that is made by the program. If you notice that each item is separated by a “@” character. The reason for this is that “Magic: The Gathering” cards sometimes have commas or periods in their name which will throw off your data. The solution was to use a character to separate that will never be used in a name of a card. 
+4.3 Text File:  If you look at the example “crimson_vow.txt”, you will see an example of the data that is made by the program. Each item is separated by a “@” character, the reason for this is that “Magic: The Gathering” cards sometimes have commas or periods in their name which will throw off your data. The solution was to use a character to separate items that will never be used in a name of a card.
 
 5 Why I used the technologies I used 
 
