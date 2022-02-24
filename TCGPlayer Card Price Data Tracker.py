@@ -1,12 +1,12 @@
 import requests;cardnames=[];normalprices=[];foilprices=[];import datetime
 
+#these are the user inputs
+token='OMITTED FOR PRIVACY'
 set="Innistrad: Crimson Vow"
 write_to='crimson_vow'
 
-def findcardprices(cardnames,normalprices,foilprices,set):
+def findcardprices(cardnames,normalprices,foilprices,set,token):
     ##this part searches for the productIDs'
-    token='OMITTED FOR PRIVACY'
-
     r = requests.post(
         'https://api.tcgplayer.com/v1.39.0/catalog/categories/1/search',
         headers={'Authorization':f"bearer {token}"
@@ -68,7 +68,7 @@ def findcardprices(cardnames,normalprices,foilprices,set):
                 cardnames.append(i['name'])
     #for i in range(len(cardnames)): print(cardnames[i], normalprices[i])
     return cardnames,normalprices,foilprices
-def token(): ## you need this if your token expires
+def gettoken(): ## you need this if your token expires
     import requests
     payload = {
         'OMITTED FOR PRIVACY'
@@ -104,6 +104,6 @@ def writetotxt(cardnames,normalprices,foilprices):
     f.write('\n')
     f.write(filterprices)
     f.close()
-#token()
-cardnames,normalprices,foilprices=findcardprices(cardnames,normalprices,foilprices,set);writetotxt(cardnames,normalprices,foilprices,write_to)
+#gettoken()
+cardnames,normalprices,foilprices=findcardprices(cardnames,normalprices,foilprices,set,token);writetotxt(cardnames,normalprices,foilprices,write_to)
 
