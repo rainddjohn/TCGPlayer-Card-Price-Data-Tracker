@@ -1,5 +1,5 @@
 import pygame;pygame.init();set='Crimson Vow'
-(width,height)=(300,700);background_color= (0,0,0)
+(width,height)=(300,900);background_color= (0,0,0)
 screen=pygame.display.set_mode((width,height));screen.fill(background_color);pygame.display.set_caption(f'{set}')
 f= open('crimson_vow.txt', 'r');list1=[];list2=[]
 #takes txt file and converts it into a list of strings
