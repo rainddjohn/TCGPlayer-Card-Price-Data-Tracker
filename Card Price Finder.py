@@ -85,7 +85,7 @@ def gettoken(public_key,private_key): ## you need this if your token expires
     token_response_data = r.json()
     print('Token Received:')
     print(token_response_data['access_token'])
-def writetotxt(cardnames,normalprices,foilprices):
+def writetotxt(cardnames,normalprices,foilprices,write_to):
     filternames = [];filterprices = []
     # takes out cards we don't want in this list
     for i in range(len(cardnames)):
