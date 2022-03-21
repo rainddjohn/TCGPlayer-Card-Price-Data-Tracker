@@ -5,11 +5,16 @@ token='Paste Token Here'
 set="Type the exact case sensitive name of the set you want here "
 write_to='Type the name of the file you want to save the data to here'
 
-import requests;cardnames=[];normalprices=[];foilprices=[];import datetime
+import requests
+import datetime
 
+class data():
+    cardnames=[]
+    normalprices=[]
+    foilprices=[]
+data=data()
 
-
-def findcardprices(cardnames,normalprices,foilprices,set,token):
+def findcardprices(data,set,token):
     ##this part searches for the productIDs'
 
     r = requests.post(
@@ -34,7 +39,7 @@ def findcardprices(cardnames,normalprices,foilprices,set,token):
 
     if r.status_code != 200:
         gettoken(public_key,private_key)
-        return cardnames,normalprices,foilprices
+        return data
 
     productIDs=list(search_response_data.values())
     productIDs=productIDs[3]
@@ -58,12 +63,12 @@ def findcardprices(cardnames,normalprices,foilprices,set,token):
 
 
     ###prices input to lists
-    priceresults=list(search_response_data['results']);normalprices=[];foilprices=[]
+    priceresults=list(search_response_data['results'])
     for i in priceresults:
         if i['subTypeName']=='Normal':
-            normalprices.append(i['marketPrice'])
+            data.normalprices.append(i['marketPrice'])
         if i['subTypeName']=='Foil':
-            foilprices.append(i['marketPrice'])
+            data.foilprices.append(i['marketPrice'])
 
     #this part turns productIDs into names
     r = requests.get(
@@ -73,13 +78,13 @@ def findcardprices(cardnames,normalprices,foilprices,set,token):
         }
     )
     search_response_data = r.json()
-    nameresults=search_response_data['results'];cardnames=[]
+    nameresults=search_response_data['results']
+    
     for j in backupproductIDs:
         for i in nameresults:
             if j==i['productId']:
-                cardnames.append(i['name'])
-
-    return cardnames,normalprices,foilprices
+                data.cardnames.append(i['name'])
+    return data
 
 def gettoken(public_key,private_key): ## you need this if your token expires
     import requests
@@ -95,19 +100,29 @@ def gettoken(public_key,private_key): ## you need this if your token expires
     token_response_data = r.json()
     print('Paste this into the token input:')
     print(token_response_data['access_token'])
-def writetotxt(cardnames,normalprices,foilprices,write_to):
-    filternames = [];filterprices = []
+
+def writetotxt(data,write_to):
+    filternames = []
+    filterprices = []
+    
     # takes out cards we don't want in this list
-    for i in range(len(cardnames)):
-        if normalprices[i] is None: continue
-        if not '(' in cardnames[i] and not ' - ' in cardnames[i] and int(normalprices[i] > 2):
-            filternames.append(cardnames[i]);filterprices.append(normalprices[i])
+    for i in range(len(data.cardnames)):
+        if data.normalprices[i] is None: 
+            continue
+            
+        if not '(' in data.cardnames[i] and not ' - ' in data.cardnames[i] and int(data.normalprices[i] > 2):
+            filternames.append(data.cardnames[i])
+            filterprices.append(data.normalprices[i])
 
     # for i in range(len(cardnames)):print(cardnames[i],foilprices[i])
-    for i in range(len(filternames)): print(filternames[i], filterprices[i])
+    for i in range(len(filternames)): 
+        print(filternames[i], filterprices[i])
+        
     # turns data into strings to write to txt
+    
     filternames = '@'.join(str(y) for y in filternames)
     filterprices = '@'.join(str(y) for y in filterprices)
+    
     # writes data to txt file
     f = open(f'{write_to}.txt', 'a')
     f.write('\n')
@@ -118,4 +133,5 @@ def writetotxt(cardnames,normalprices,foilprices,write_to):
     f.write(filterprices)
     f.close()
 
-cardnames,normalprices,foilprices=findcardprices(cardnames,normalprices,foilprices,set,token);writetotxt(cardnames,normalprices,foilprices,write_to)
+data=findcardprices(data,set,token)
+writetotxt(data,write_to)
