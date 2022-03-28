@@ -34,22 +34,22 @@ def findcardprices(data,set,token):
             ]
         }
     )
-    search_response_data = r.json()
+    search_response_productIDs = r.json()
 
 
     if r.status_code != 200:
         gettoken(public_key,private_key)
         return data
 
-    productIDs=list(search_response_data.values())
+    productIDs=list(search_response_productIDs.values())
     productIDs=productIDs[3]
     backupproductIDs=list(productIDs)
 
-
-    #this part searches pricing
-    backup_productIDs=[]
+    # this part searches pricing
+    #cuts product ID data down to 250 because the API caps out at 250
+    unused_productIDs=[]
     if len(productIDs)>250:
-        backup_productIDs= productIDs[250:]
+        unused_productIDs= productIDs[250:]
         productIDs= productIDs[:250]
 
     productIDs= ','.join(str(y) for y in productIDs)
@@ -59,11 +59,12 @@ def findcardprices(data,set,token):
             'Authorization': f"bearer {token}"
         }
     )
-    search_response_data = r.json()
+    search_response_prices = r.json()
 
 
     ###prices input to lists
-    priceresults=list(search_response_data['results'])
+    priceresults=list(search_response_prices['results'])
+
     for i in priceresults:
         if i['subTypeName']=='Normal':
             data.normalprices.append(i['marketPrice'])
@@ -77,16 +78,15 @@ def findcardprices(data,set,token):
             'Authorization': f"bearer {token}"
         }
     )
-    search_response_data = r.json()
-    nameresults=search_response_data['results']
-    
-    for j in backupproductIDs:
-        for i in nameresults:
-            if j==i['productId']:
-                data.cardnames.append(i['name'])
+    search_response_names = r.json()
+    nameresults=search_response_names['results']
+
+    data.cardnames = [i['name'] for j in backupproductIDs for i in nameresults if j == i['productId']]
+
     return data
 
-def gettoken(public_key,private_key): ## you need this if your token expires
+## you need this if your token expires
+def gettoken(public_key,private_key):
     import requests
     payload = {
         'grant_type': 'client_credentials',
@@ -104,25 +104,22 @@ def gettoken(public_key,private_key): ## you need this if your token expires
 def writetotxt(data,write_to):
     filternames = []
     filterprices = []
-    
+
     # takes out cards we don't want in this list
     for i in range(len(data.cardnames)):
-        if data.normalprices[i] is None: 
-            continue
-            
+
+        if data.normalprices[i] is None: continue
+
         if not '(' in data.cardnames[i] and not ' - ' in data.cardnames[i] and int(data.normalprices[i] > 2):
             filternames.append(data.cardnames[i])
             filterprices.append(data.normalprices[i])
 
-    # for i in range(len(cardnames)):print(cardnames[i],foilprices[i])
-    for i in range(len(filternames)): 
+    for i in range(len(filternames)):
         print(filternames[i], filterprices[i])
-        
+
     # turns data into strings to write to txt
-    
     filternames = '@'.join(str(y) for y in filternames)
     filterprices = '@'.join(str(y) for y in filterprices)
-    
     # writes data to txt file
     f = open(f'{write_to}.txt', 'a')
     f.write('\n')
