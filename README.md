@@ -8,7 +8,11 @@ There are two parts to this program. The first part connects to the TCG Player A
 
 ## 3 Installation: 
 
-In order to install this program, you need python 3, and the requests and pygame libraries for python. You also need an API developer key from TCGplayer.com to retrieve data from their API. The link for that is [here:](https://docs.tcgplayer.com/docs/getting-started). 
+In order to install this program, you need python 3, and the requests and pygame libraries for python. 
+
+Command to download pygame:
+<code> python3 -m pip install -U pygame --user </code>
+You also need an API developer key from TCGplayer.com to retrieve data from their API. The link for that is [here:](https://docs.tcgplayer.com/docs/getting-started). 
 
 
 ### 3.1 Price Finder Inputs: 
